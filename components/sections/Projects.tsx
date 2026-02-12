@@ -4,12 +4,16 @@ import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 import { cn } from "@/lib/utils";
 import { Card } from "@/components/ui";
 
+interface ProjectsProps {
+    mode: "developer" | "designer";
+}
+
 /**
  * Projects Section with grid layout
  * Client component for scroll animations
  */
 
-const projects = [
+const designerProjects = [
     {
         id: "1",
         title: "UI/UX",
@@ -48,8 +52,52 @@ const projects = [
     },
 ];
 
-export function Projects() {
+const developerProjects = [
+    {
+        id: "d1",
+        title: "E-Commerce",
+        category: "Full Stack",
+        description: "Next.js & Supabase online store",
+    },
+    {
+        id: "d2",
+        title: "Dashboard",
+        category: "Frontend",
+        description: "React Admin Dashboard with Charts",
+    },
+    {
+        id: "d3",
+        title: "API Service",
+        category: "Backend",
+        description: "Node.js Microservices Architecture",
+    },
+    {
+        id: "d4",
+        title: "Portfolio",
+        category: "Frontend",
+        description: "Modern 3D Interactive Portfolio",
+    },
+    {
+        id: "d5",
+        title: "Chat App",
+        category: "Full Stack",
+        description: "Real-time chat with Socket.io",
+    },
+    {
+        id: "d6",
+        title: "Task Manager",
+        category: "Mobile",
+        description: "React Native Productivity App",
+    },
+];
+
+export function Projects({ mode }: ProjectsProps) {
     const { ref, isVisible } = useScrollAnimation(0.2);
+
+    const activeProjects = mode === "developer" ? developerProjects : designerProjects;
+    const activeFilters = mode === "developer"
+        ? ["All", "Full Stack", "Frontend", "Backend", "Mobile"]
+        : ["All", "UI/UX", "Branding", "Illustration", "Key Visuals"];
 
     return (
         <section
@@ -63,7 +111,7 @@ export function Projects() {
                         isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
                     )}
                 >
-                    Projects
+                    {mode === "developer" ? "Development Projects" : "Design Showcase"}
                 </h2>
 
                 {/* Filter tabs */}
@@ -73,7 +121,7 @@ export function Projects() {
                         isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
                     )}
                 >
-                    {["All", "UI/UX", "Branding", "Illustration", "Development"].map(
+                    {activeFilters.map(
                         (filter) => (
                             <button
                                 key={filter}
@@ -87,7 +135,7 @@ export function Projects() {
 
                 {/* Projects grid */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {projects.map((project, index) => (
+                    {activeProjects.map((project, index) => (
                         <div
                             key={project.id}
                             className={cn(

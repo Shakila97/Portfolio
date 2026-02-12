@@ -1,3 +1,6 @@
+"use client";
+
+import { useState } from "react";
 import { Navigation } from "@/components/Navigation";
 import {
   Hero,
@@ -11,16 +14,18 @@ import {
 
 /**
  * Home Page - Portfolio
- * Server component that assembles all sections
+ * Client component that manages the application state (Developer vs Designer mode)
  */
 export default function Home() {
+  const [mode, setMode] = useState<"developer" | "designer">("developer");
+
   return (
     <>
       <Navigation />
       <main>
-        <Hero />
+        <Hero mode={mode} setMode={setMode} />
         <AboutMe />
-        <Projects />
+        <Projects mode={mode} />
         <Achievements />
         <Testimonials />
         <Contact />

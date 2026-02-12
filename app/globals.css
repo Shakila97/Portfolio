@@ -2,26 +2,49 @@
 
 @theme {
   /* Colors - Dark theme palette */
-  --color-primary: #ffffff;
-  --color-secondary: #a0a0a0;
-  --color-accent: #4a9eff;
+  --color-primary: #B2B2B2;
+  --color-secondary: #4D4D4D;
+  --color-accent: #B2B2B2;
   --color-surface: #0a0a0a;
   --color-surface-elevated: #1a1a1a;
   --color-border: #2a2a2a;
-  
+
   /* Spacing - Custom large scales */
   --spacing-120: 120px;
-  
+
   /* Breakpoints - Explicitly defined */
   --breakpoint-sm: 640px;
   --breakpoint-md: 768px;
   --breakpoint-lg: 1024px;
   --breakpoint-xl: 1280px;
   --breakpoint-2xl: 1536px;
-  
+
   /* Typography */
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-inter), -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  --font-mono: 'SF Mono', 'Fira Code', 'Fira Mono', 'Roboto Mono', monospace;
+
+  /* Inter Font Weights - Normal */
+  --font-inter-thin: 100;
+  --font-inter-extralight: 200;
+  --font-inter-light: 300;
+  --font-inter-regular: 400;
+  --font-inter-medium: 500;
+  --font-inter-semibold: 600;
+  --font-inter-bold: 700;
+  --font-inter-extrabold: 800;
+  --font-inter-black: 900;
+
+  /* Inter Font Weights - Italic */
+  --font-inter-thin-italic: 100;
+  --font-inter-extralight-italic: 200;
+  --font-inter-light-italic: 300;
+  --font-inter-regular-italic: 400;
+  --font-inter-medium-italic: 500;
+  --font-inter-semibold-italic: 600;
+  --font-inter-bold-italic: 700;
+  --font-inter-extrabold-italic: 800;
+  --font-inter-black-italic: 900;
+
 }
 
 :root {
@@ -30,7 +53,9 @@
 }
 
 body {
-  background: var(--background);
+  background: linear-gradient(to bottom, #2A2B2B, #090A0A);
+  background-attachment: fixed;
+  min-height: 100vh;
   color: var(--foreground);
   font-family: var(--font-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -53,7 +78,7 @@ html {
 
 ::-webkit-scrollbar-thumb {
   background: #2a2a2a;
-  border-radius: 5px;
+  border-radius: 8px;
 }
 
 ::-webkit-scrollbar-thumb:hover {

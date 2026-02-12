@@ -37,7 +37,7 @@ export function AboutMe() {
                         )}
                     >
                         <p className="text-lg text-secondary leading-relaxed">
-                            I'm a passionate developer and designer with a keen eye for detail
+                            I&apos;m a passionate developer and designer with a keen eye for detail
                             and a love for creating exceptional digital experiences. With
                             expertise in modern web technologies, I bring ideas to life
                             through clean code and beautiful design.
@@ -48,7 +48,7 @@ export function AboutMe() {
                             delivers an outstanding user experience.
                         </p>
                         <p className="text-lg text-secondary leading-relaxed">
-                            When I'm not coding, you'll find me exploring new design trends,
+                            When I&apos;m not coding, you&apos;ll find me exploring new design trends,
                             contributing to open-source projects, or sharing knowledge with
                             the developer community.
                         </p>
@@ -95,11 +95,13 @@ export function AboutMe() {
                         )}
                     >
                         <div className="relative aspect-square rounded-lg overflow-hidden border border-border">
-                            <div className="absolute inset-0 bg-gradient-to-br from-accent/20 to-transparent" />
-                            <div className="w-full h-full bg-surface-elevated flex items-center justify-center text-secondary">
-                                {/* Placeholder - replace with actual image */}
-                                <span className="text-6xl">👨‍💻</span>
-                            </div>
+                            <div className="absolute inset-0 bg-gradient-to-br from-accent/20 to-transparent z-10" />
+                            <Image
+                                src="/images/about-me.png"
+                                alt="About Me"
+                                fill
+                                className="object-cover"
+                            />
                         </div>
                     </div>
                 </div>

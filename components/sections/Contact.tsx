@@ -136,7 +136,7 @@ export function Contact() {
                     {/* Success Message */}
                     {submitStatus === "success" && (
                         <div className="p-4 bg-accent/10 border border-accent rounded-lg text-center">
-                            <p className="text-accent">Message sent successfully! I'll get back to you soon.</p>
+                            <p className="text-accent">Message sent successfully! I&apos;ll get back to you soon.</p>
                         </div>
                     )}
                 </form>

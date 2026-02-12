@@ -1,32 +1,29 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useSyncExternalStore } from "react";
 
 /**
  * Custom hook to detect media query matches
+ * Uses useSyncExternalStore to properly sync with external window.matchMedia API
  * @param query - Media query string (e.g., "(min-width: 768px)")
  * @returns boolean indicating if the media query matches
  */
 export function useMediaQuery(query: string): boolean {
-    const [matches, setMatches] = useState(false);
-    const [mounted, setMounted] = useState(false);
+    const subscribe = (callback: () => void) => {
+        const matchMedia = window.matchMedia(query);
+        matchMedia.addEventListener("change", callback);
+        return () => {
+            matchMedia.removeEventListener("change", callback);
+        };
+    };
 
-    useEffect(() => {
-        setMounted(true);
-        const media = window.matchMedia(query);
+    const getSnapshot = () => {
+        return window.matchMedia(query).matches;
+    };
 
-        if (media.matches !== matches) {
-            setMatches(media.matches);
-        }
+    const getServerSnapshot = () => {
+        return false;
+    };
 
-        const listener = () => setMatches(media.matches);
-        media.addEventListener("change", listener);
-
-        return () => media.removeEventListener("change", listener);
-    }, [matches, query]);
-
-    // Prevent hydration mismatch
-    if (!mounted) return false;
-
-    return matches;
+    return useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
 }
