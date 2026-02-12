@@ -1,0 +1,80 @@
+[00:00:05.453] Server  LOG     ✓ Ready in 4s
+[00:00:06.654] Server  ERROR   ⨯ ./app/page.tsx:1:1
+Module not found: Can't resolve '@/components/Navigation'
+> 1 | import { Navigation } from "@/components/Navigation";
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  2 | import { Hero, AboutMe, Projects, Achievements, Testimonials, Contact, Footer } from "@/components/sections";
+  3 |
+  4 | export default function Home() {
+
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+
+./app/page.tsx:2:1
+Module not found: Can't resolve '@/components/sections'
+  1 | import { Navigation } from "@/components/Navigation";
+> 2 | import { Hero, AboutMe, Projects, Achievements, Testimonials, Contact, Footer } from "@/components/sections";
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  3 |
+  4 | export default function Home() {
+  5 |     return (
+
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[00:00:09.233] Browser ERROR   uncaughtError: Error: ./app/page.tsx:1:1
+Module not found: Can't resolve '@/components/Navigation'
+> 1 | import { Navigation } from "@/components/Navigation";
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  2 | import { Hero, AboutMe, Projects, Achievements, Testimonials, Contact, Footer } from "@/components/sections";
+  3 |
+  4 | export default function Home() {
+
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[00:00:09.444] Browser ERROR   ./app/page.tsx:1:1
+Module not found: Can't resolve '@/components/Navigation'
+> 1 | import { Navigation } from "@/components/Navigation";
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  2 | import { Hero, AboutMe, Projects, Achievements, Testimonials, Contact, Footer } from "@/components/sections";
+  3 |
+  4 | export default function Home() {
+
+https://nextjs.org/docs/messages/module-not-found
+[00:00:09.444] Browser ERROR   ./app/page.tsx:2:1
+Module not found: Can't resolve '@/components/sections'
+  1 | import { Navigation } from "@/components/Navigation";
+> 2 | import { Hero, AboutMe, Projects, Achievements, Testimonials, Contact, Footer } from "@/components/sections";
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  3 |
+  4 | export default function Home() {
+  5 |     return (
+
+https://nextjs.org/docs/messages/module-not-found
+[00:00:10.626] Browser ERROR   ./app/page.tsx:1:1
+Module not found: Can't resolve '@/components/Navigation'
+> 1 | import { Navigation } from "@/components/Navigation";
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  2 | import { Hero, AboutMe, Projects, Achievements, Testimonials, Contact, Footer } from "@/components/sections";
+  3 |
+  4 | export default function Home() {
+
+https://nextjs.org/docs/messages/module-not-found
+[00:00:10.626] Browser ERROR   ./app/page.tsx:2:1
+Module not found: Can't resolve '@/components/sections'
+  1 | import { Navigation } from "@/components/Navigation";
+> 2 | import { Hero, AboutMe, Projects, Achievements, Testimonials, Contact, Footer } from "@/components/sections";
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  3 |
+  4 | export default function Home() {
+  5 |     return (
+
+https://nextjs.org/docs/messages/module-not-found

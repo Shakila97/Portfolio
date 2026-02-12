@@ -1,0 +1,190 @@
+{
+    "developer": [
+        {
+            "id": "d1",
+            "title": "E-Commerce",
+            "category": "Full Stack",
+            "layout": "short",
+            "description": "A full-featured e-commerce platform with payment integration",
+            "technologies": [
+                "Next.js",
+                "Node.js",
+                "MongoDB"
+            ],
+            "image": "",
+            "liveUrl": "",
+            "githubUrl": ""
+        },
+        {
+            "id": "d2",
+            "title": "Dashboard",
+            "category": "Frontend",
+            "layout": "medium",
+            "description": "Analytics dashboard with real-time data visualization",
+            "technologies": [
+                "React",
+                "D3.js",
+                "TailwindCSS"
+            ],
+            "image": "",
+            "liveUrl": "",
+            "githubUrl": ""
+        },
+        {
+            "id": "d3",
+            "title": "API Service",
+            "category": "Backend",
+            "layout": "short",
+            "description": "RESTful API service with authentication and rate limiting",
+            "technologies": [
+                "Node.js",
+                "Express",
+                "PostgreSQL"
+            ],
+            "image": "",
+            "liveUrl": "",
+            "githubUrl": ""
+        },
+        {
+            "id": "d4",
+            "title": "Portfolio",
+            "category": "Frontend",
+            "layout": "tall",
+            "description": "Modern portfolio website with animations and dark mode",
+            "technologies": [
+                "Next.js",
+                "TypeScript",
+                "Framer Motion"
+            ],
+            "image": "",
+            "liveUrl": "",
+            "githubUrl": ""
+        },
+        {
+            "id": "d5",
+            "title": "Chat App",
+            "category": "Full Stack",
+            "layout": "short",
+            "description": "Real-time chat application with WebSocket support",
+            "technologies": [
+                "React",
+                "Socket.io",
+                "Redis"
+            ],
+            "image": "",
+            "liveUrl": "",
+            "githubUrl": ""
+        },
+        {
+            "id": "d6",
+            "title": "Task Manager",
+            "category": "Mobile",
+            "layout": "medium",
+            "description": "Cross-platform task management mobile application",
+            "technologies": [
+                "React Native",
+                "Firebase",
+                "Redux"
+            ],
+            "image": "",
+            "liveUrl": "",
+            "githubUrl": ""
+        }
+    ],
+    "designer": [
+        {
+            "id": "1",
+            "title": "UI/UX",
+            "category": "Design",
+            "layout": "tall",
+            "description": "User interface and experience design for mobile apps",
+            "technologies": [
+                "Figma",
+                "Adobe XD",
+                "Sketch"
+            ],
+            "image": "/images/UX_UI_Web_Design_For_Internet_From_Space_-_Dominik_D_.jpg",
+            "liveUrl": "",
+            "githubUrl": "",
+            "images": []
+        },
+        {
+            "id": "2",
+            "title": "Branding",
+            "category": "Identity",
+            "layout": "medium",
+            "description": "Complete brand identity design and guidelines",
+            "technologies": [
+                "Illustrator",
+                "Photoshop"
+            ],
+            "image": "/images/EvoCargo_-_Cargo_Branding_Design.jpg",
+            "liveUrl": "",
+            "githubUrl": "",
+            "images": []
+        },
+        {
+            "id": "3",
+            "title": "Logo",
+            "category": "Branding",
+            "layout": "short",
+            "description": "Custom logo design for various businesses",
+            "technologies": [
+                "Illustrator",
+                "Figma"
+            ],
+            "image": "/images/Gemini_Generated_Image_1r6njh1r6njh1r6n.png",
+            "liveUrl": "",
+            "githubUrl": "",
+            "images": [
+                "/images/logo.svg",
+                "/images/Letter_S_T_C_Logo.jpg"
+            ]
+        },
+        {
+            "id": "4",
+            "title": "Social",
+            "category": "Media",
+            "layout": "tall",
+            "description": "Social media graphics and content design",
+            "technologies": [
+                "Photoshop",
+                "Canva"
+            ],
+            "image": "/images/PACK_10_templates_Social_media_agência_de_Marketing_Designer_Gráfico.jpg",
+            "liveUrl": "",
+            "githubUrl": "",
+            "images": []
+        },
+        {
+            "id": "5",
+            "title": "Character",
+            "category": "Design",
+            "layout": "short",
+            "description": "Character design and illustration",
+            "technologies": [
+                "Procreate",
+                "Illustrator"
+            ],
+            "image": "/images/OC_Character_Turnaround_Sheet_—_Mirabella.jpg",
+            "liveUrl": "",
+            "githubUrl": "",
+            "images": []
+        },
+        {
+            "id": "6",
+            "title": "Paintings",
+            "category": "Art",
+            "layout": "medium",
+            "description": "Digital paintings and artwork",
+            "technologies": [
+                "Procreate",
+                "Photoshop"
+            ],
+            "image": "/images/download_(51).jpg",
+            "liveUrl": "",
+            "githubUrl": "",
+            "images": []
+        }
+    ]
+}

@@ -1,0 +1,6 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 14, "column": 0}, "map": {"version":3,"sources":["file:///C:/Users/Shaki/Downloads/Portfolio/portfolio/app/page.tsx"],"sourcesContent":["import { Navigation } from \"@/components/Navigation\";\r\nimport { Hero, AboutMe, Projects, Achievements, Testimonials, Contact, Footer } from \"@/components/sections\";\r\n\r\nexport default function Home() {\r\n    return (\r\n        <>\r\n            <Navigation />\r\n            <main className=\"w-full\">\r\n                <Hero />\r\n                <AboutMe />\r\n                <Projects />\r\n                <Achievements />\r\n                <Testimonials />\r\n                <Contact />\r\n                <Footer />\r\n            </main>\r\n        </>\r\n    );\r\n}\r\n"],"names":[],"mappings":";;;;;;;;;;;;;;;;;;AAGe,SAAS;IACpB,qBACI;;0BACI,8OAAC;;;;;0BACD,8OAAC;gBAAK,WAAU;;kCACZ,8OAAC;;;;;kCACD,8OAAC;;;;;kCACD,8OAAC;;;;;kCACD,8OAAC;;;;;kCACD,8OAAC;;;;;kCACD,8OAAC;;;;;kCACD,8OAAC;;;;;;;;;;;;;AAIjB"}}]
+}
