@@ -1,0 +1,68 @@
+[
+    {
+        "id": "1",
+        "title": "Enterprise Design Thinking",
+        "issuer": "IBM",
+        "date": "Jan 4, 2026",
+        "description": "The earner has acquired knowledge of applying Enterprise Design Thinking and its value. As a Practitioner, they have the foundation to start applying it to their work.",
+        "category": "UI/UX",
+        "icon": "🎯",
+        "certificateUrl": "",
+        "credentialUrl": ""
+    },
+    {
+        "id": "2",
+        "title": "Advanced React Patterns",
+        "issuer": "Meta",
+        "date": "Dec 15, 2025",
+        "description": "Demonstrated mastery of advanced React patterns including hooks, context, and performance optimization techniques for building scalable applications.",
+        "category": "Development",
+        "icon": "⚛️",
+        "certificateUrl": "",
+        "credentialUrl": ""
+    },
+    {
+        "id": "3",
+        "title": "UX Design Certification",
+        "issuer": "Google",
+        "date": "Nov 20, 2025",
+        "description": "Completed comprehensive training in user experience design, including user research, wireframing, prototyping, and usability testing.",
+        "category": "Design",
+        "icon": "🎨",
+        "certificateUrl": "",
+        "credentialUrl": ""
+    },
+    {
+        "id": "4",
+        "title": "Cloud Architecture",
+        "issuer": "AWS",
+        "date": "Oct 10, 2025",
+        "description": "Certified in designing and deploying scalable, highly available systems on Amazon Web Services cloud platform.",
+        "category": "Cloud",
+        "icon": "☁️",
+        "certificateUrl": "",
+        "credentialUrl": ""
+    },
+    {
+        "id": "5",
+        "title": "Agile Project Management",
+        "issuer": "Scrum Alliance",
+        "date": "Sep 5, 2025",
+        "description": "Certified Scrum Master with expertise in agile methodologies, sprint planning, and team collaboration.",
+        "category": "Management",
+        "icon": "📊",
+        "certificateUrl": "",
+        "credentialUrl": ""
+    },
+    {
+        "id": "6",
+        "title": "Cybersecurity Fundamentals",
+        "issuer": "CompTIA",
+        "date": "Aug 18, 2025",
+        "description": "Comprehensive understanding of security concepts, tools, and best practices for protecting digital assets.",
+        "category": "Security",
+        "icon": "🔒",
+        "certificateUrl": "",
+        "credentialUrl": ""
+    }
+]

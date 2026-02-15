@@ -1,0 +1,32 @@
+[
+    {
+        "id": "1",
+        "name": "Sarah Johnson",
+        "role": "CEO",
+        "company": "TechStart Inc",
+        "content": "Exceptional work! The attention to detail and professionalism exceeded our expectations. Highly recommended for any project.",
+        "rating": 5,
+        "avatar": "",
+        "featured": true
+    },
+    {
+        "id": "2",
+        "name": "Michael Chen",
+        "role": "Product Manager",
+        "company": "Tech Corp",
+        "content": "Outstanding developer with great communication skills. Delivered the project on time and with excellent quality.",
+        "rating": 5,
+        "avatar": "",
+        "featured": true
+    },
+    {
+        "id": "3",
+        "name": "Emily Rodriguez",
+        "role": "Founder",
+        "company": "Startup Inc",
+        "content": "A true professional who understands both design and development. Our product looks and works beautifully.",
+        "rating": 5,
+        "avatar": "",
+        "featured": true
+    }
+]

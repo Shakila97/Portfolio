@@ -1,37 +1,84 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 import { cn } from "@/lib/utils";
 import { Card } from "@/components/ui";
 
+interface Achievement {
+    id: string;
+    title: string;
+    issuer: string;
+    date: string;
+    description: string;
+    category: string;
+    icon: string;
+    certificateUrl?: string;
+    credentialUrl?: string;
+}
+
 /**
  * Achievements & Certifications Section
- * Client component for scroll animations
+ * Client component with card design matching the uploaded reference
  */
 
-const achievements = [
+// Fallback data in case API fails
+const fallbackAchievements: Achievement[] = [
     {
         id: "1",
-        title: "Achievement Title",
-        issuer: "Organization Name",
-        date: "2024",
+        title: "Enterprise Design Thinking",
+        issuer: "IBM",
+        date: "Jan 4, 2026",
+        description: "The earner has acquired knowledge of applying Enterprise Design Thinking and its value. As a Practitioner, they have the foundation to start applying it to their work.",
+        category: "UI/UX",
+        icon: "🎯",
     },
     {
         id: "2",
-        title: "Achievement Title",
-        issuer: "Organization Name",
-        date: "2024",
+        title: "Advanced React Patterns",
+        issuer: "Meta",
+        date: "Dec 15, 2025",
+        description: "Demonstrated mastery of advanced React patterns including hooks, context, and performance optimization techniques for building scalable applications.",
+        category: "Development",
+        icon: "⚛️",
     },
     {
         id: "3",
-        title: "Achievement Title",
-        issuer: "Organization Name",
-        date: "2023",
+        title: "UX Design Certification",
+        issuer: "Google",
+        date: "Nov 20, 2025",
+        description: "Completed comprehensive training in user experience design, including user research, wireframing, prototyping, and usability testing.",
+        category: "Design",
+        icon: "🎨",
     },
 ];
 
 export function Achievements() {
     const { ref, isVisible } = useScrollAnimation(0.3);
+    const [achievements, setAchievements] = useState<Achievement[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
+
+    // Fetch achievements from API
+    useEffect(() => {
+        const fetchAchievements = async () => {
+            try {
+                const response = await fetch("/api/achievements");
+                if (response.ok) {
+                    const data = await response.json();
+                    setAchievements(data);
+                } else {
+                    setAchievements(fallbackAchievements);
+                }
+            } catch (error) {
+                console.error("Failed to fetch achievements:", error);
+                setAchievements(fallbackAchievements);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        fetchAchievements();
+    }, []);
 
     return (
         <section
@@ -61,30 +108,38 @@ export function Achievements() {
                             }}
                         >
                             <Card className="h-full hover:border-accent transition-colors duration-300">
-                                {/* Certificate placeholder */}
-                                <div className="aspect-video bg-surface rounded-lg mb-4 flex items-center justify-center">
-                                    <svg
-                                        className="w-16 h-16 text-secondary"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        viewBox="0 0 24 24"
-                                    >
-                                        <path
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            strokeWidth={2}
-                                            d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"
-                                        />
-                                    </svg>
+                                {/* Icon/Certificate area */}
+                                <div className="aspect-video bg-surface rounded-lg mb-4 flex items-center justify-center text-4xl">
+                                    {achievement.icon || "🏆"}
                                 </div>
 
                                 <Card.Header>
-                                    <Card.Title>{achievement.title}</Card.Title>
+                                    <div className="flex justify-between items-start mb-1">
+                                        <Card.Title>{achievement.title}</Card.Title>
+                                        <span className="text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full bg-surface border border-border">
+                                            {achievement.category}
+                                        </span>
+                                    </div>
+                                    <p className="text-sm text-secondary">{achievement.issuer}</p>
                                 </Card.Header>
 
                                 <Card.Body>
-                                    <p className="text-sm mb-2">{achievement.issuer}</p>
-                                    <p className="text-xs text-accent">{achievement.date}</p>
+                                    <p className="text-xs text-secondary mt-2 mb-4 line-clamp-3">
+                                        {achievement.description}
+                                    </p>
+                                    <div className="flex justify-between items-center mt-auto">
+                                        <p className="text-xs text-accent font-medium">{achievement.date}</p>
+                                        {(achievement.certificateUrl || achievement.credentialUrl) && (
+                                            <a
+                                                href={achievement.certificateUrl || achievement.credentialUrl}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="text-xs text-accent hover:underline"
+                                            >
+                                                View Source
+                                            </a>
+                                        )}
+                                    </div>
                                 </Card.Body>
                             </Card>
                         </div>
