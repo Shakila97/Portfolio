@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+import Image from "next/image";
 
 interface Project {
     id: string;
@@ -21,6 +22,11 @@ export function ProjectsManager() {
     const [editingProject, setEditingProject] = useState<Project | null>(null);
     const [isFormOpen, setIsFormOpen] = useState(false);
 
+    // Image upload state
+    const [imageUrl, setImageUrl] = useState("");
+    const [isUploading, setIsUploading] = useState(false);
+    const fileInputRef = useRef<HTMLInputElement>(null);
+
     // Fetch projects
     const fetchProjects = async () => {
         setIsLoading(true);
@@ -39,6 +45,43 @@ export function ProjectsManager() {
         fetchProjects();
     }, [mode]);
 
+    // Sync imageUrl when editing project changes
+    useEffect(() => {
+        setImageUrl(editingProject?.image || "");
+    }, [editingProject]);
+
+    // Handle image file upload
+    const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+
+        setIsUploading(true);
+        try {
+            const formData = new FormData();
+            formData.append("file", file);
+            formData.append("folder", "projects");
+
+            const response = await fetch("/api/upload", {
+                method: "POST",
+                body: formData,
+            });
+
+            if (!response.ok) {
+                const err = await response.json();
+                alert(err.error || "Upload failed");
+                return;
+            }
+
+            const { url } = await response.json();
+            setImageUrl(url);
+        } catch (error) {
+            console.error("Upload error:", error);
+            alert("Failed to upload image");
+        } finally {
+            setIsUploading(false);
+        }
+    };
+
     // Create or update project
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -50,14 +93,13 @@ export function ProjectsManager() {
             layout: formData.get("layout") as string,
             description: formData.get("description") as string,
             technologies: (formData.get("technologies") as string).split(",").map(t => t.trim()),
-            image: formData.get("image") as string,
+            image: imageUrl,
             liveUrl: formData.get("liveUrl") as string,
             githubUrl: formData.get("githubUrl") as string,
         };
 
         try {
             if (editingProject) {
-                // Update
                 await fetch("/api/projects", {
                     method: "PUT",
                     headers: { "Content-Type": "application/json" },
@@ -68,7 +110,6 @@ export function ProjectsManager() {
                     }),
                 });
             } else {
-                // Create
                 await fetch("/api/projects", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
@@ -82,6 +123,7 @@ export function ProjectsManager() {
             fetchProjects();
             setIsFormOpen(false);
             setEditingProject(null);
+            setImageUrl("");
         } catch (error) {
             console.error("Failed to save project:", error);
         }
@@ -101,6 +143,12 @@ export function ProjectsManager() {
         }
     };
 
+    const openAddForm = () => {
+        setEditingProject(null);
+        setImageUrl("");
+        setIsFormOpen(true);
+    };
+
     return (
         <div className="space-y-6">
             {/* Header */}
@@ -109,8 +157,8 @@ export function ProjectsManager() {
                     <button
                         onClick={() => setMode("developer")}
                         className={`px-4 py-2 rounded-lg font-medium transition-colors ${mode === "developer"
-                                ? "bg-accent text-white"
-                                : "bg-surface border border-border hover:bg-surface-elevated"
+                            ? "bg-accent text-white"
+                            : "bg-surface border border-border hover:bg-surface-elevated"
                             }`}
                     >
                         Developer Projects
@@ -118,18 +166,15 @@ export function ProjectsManager() {
                     <button
                         onClick={() => setMode("designer")}
                         className={`px-4 py-2 rounded-lg font-medium transition-colors ${mode === "designer"
-                                ? "bg-accent text-white"
-                                : "bg-surface border border-border hover:bg-surface-elevated"
+                            ? "bg-accent text-white"
+                            : "bg-surface border border-border hover:bg-surface-elevated"
                             }`}
                     >
                         Designer Projects
                     </button>
                 </div>
                 <button
-                    onClick={() => {
-                        setEditingProject(null);
-                        setIsFormOpen(true);
-                    }}
+                    onClick={openAddForm}
                     className="px-6 py-2 bg-accent text-white rounded-lg hover:bg-accent/90 transition-colors"
                 >
                     + Add Project
@@ -144,39 +189,53 @@ export function ProjectsManager() {
                     {projects.map((project) => (
                         <div
                             key={project.id}
-                            className="bg-surface-elevated border border-border rounded-lg p-4 hover:border-accent transition-colors"
+                            className="bg-surface-elevated border border-border rounded-lg overflow-hidden hover:border-accent transition-colors"
                         >
-                            <h3 className="font-bold text-lg mb-2">{project.title}</h3>
-                            <p className="text-sm text-secondary mb-2">{project.category}</p>
-                            <p className="text-sm text-secondary mb-3 line-clamp-2">
-                                {project.description}
-                            </p>
-                            <div className="flex gap-2 mb-3 flex-wrap">
-                                {project.technologies.map((tech, i) => (
-                                    <span
-                                        key={i}
-                                        className="px-2 py-1 bg-surface text-xs rounded border border-border"
+                            {/* Image thumbnail */}
+                            {project.image && (
+                                <div className="relative w-full h-36 bg-surface">
+                                    <Image
+                                        src={project.image}
+                                        alt={project.title}
+                                        fill
+                                        className="object-cover"
+                                        unoptimized
+                                    />
+                                </div>
+                            )}
+                            <div className="p-4">
+                                <h3 className="font-bold text-lg mb-2">{project.title}</h3>
+                                <p className="text-sm text-secondary mb-2">{project.category}</p>
+                                <p className="text-sm text-secondary mb-3 line-clamp-2">
+                                    {project.description}
+                                </p>
+                                <div className="flex gap-2 mb-3 flex-wrap">
+                                    {project.technologies.map((tech, i) => (
+                                        <span
+                                            key={i}
+                                            className="px-2 py-1 bg-surface text-xs rounded border border-border"
+                                        >
+                                            {tech}
+                                        </span>
+                                    ))}
+                                </div>
+                                <div className="flex gap-2">
+                                    <button
+                                        onClick={() => {
+                                            setEditingProject(project);
+                                            setIsFormOpen(true);
+                                        }}
+                                        className="flex-1 px-3 py-1.5 text-sm bg-surface border border-border rounded hover:bg-accent hover:border-accent hover:text-white transition-colors"
                                     >
-                                        {tech}
-                                    </span>
-                                ))}
-                            </div>
-                            <div className="flex gap-2">
-                                <button
-                                    onClick={() => {
-                                        setEditingProject(project);
-                                        setIsFormOpen(true);
-                                    }}
-                                    className="flex-1 px-3 py-1.5 text-sm bg-surface border border-border rounded hover:bg-accent hover:border-accent hover:text-white transition-colors"
-                                >
-                                    Edit
-                                </button>
-                                <button
-                                    onClick={() => handleDelete(project.id)}
-                                    className="flex-1 px-3 py-1.5 text-sm bg-surface border border-red-500/50 text-red-500 rounded hover:bg-red-500 hover:text-white transition-colors"
-                                >
-                                    Delete
-                                </button>
+                                        Edit
+                                    </button>
+                                    <button
+                                        onClick={() => handleDelete(project.id)}
+                                        className="flex-1 px-3 py-1.5 text-sm bg-surface border border-red-500/50 text-red-500 rounded hover:bg-red-500 hover:text-white transition-colors"
+                                    >
+                                        Delete
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     ))}
@@ -246,15 +305,76 @@ export function ProjectsManager() {
                                     placeholder="React, Node.js, MongoDB"
                                 />
                             </div>
+
+                            {/* Image Upload */}
                             <div>
-                                <label className="block text-sm font-medium mb-2">Image URL</label>
-                                <input
-                                    type="text"
-                                    name="image"
-                                    defaultValue={editingProject?.image}
-                                    className="w-full px-4 py-2 bg-surface border border-border rounded-lg focus:outline-none focus:border-accent"
-                                />
+                                <label className="block text-sm font-medium mb-2">Project Image</label>
+                                <div className="space-y-3">
+                                    {/* Preview */}
+                                    {imageUrl && (
+                                        <div className="relative w-full h-40 rounded-lg overflow-hidden border border-border bg-surface">
+                                            <Image
+                                                src={imageUrl}
+                                                alt="Preview"
+                                                fill
+                                                className="object-cover"
+                                                unoptimized
+                                            />
+                                            <button
+                                                type="button"
+                                                onClick={() => setImageUrl("")}
+                                                className="absolute top-2 right-2 w-7 h-7 bg-black/60 hover:bg-red-500 text-white rounded-full flex items-center justify-center text-sm transition-colors"
+                                            >
+                                                ✕
+                                            </button>
+                                        </div>
+                                    )}
+
+                                    {/* Upload Button */}
+                                    <div className="flex gap-2">
+                                        <button
+                                            type="button"
+                                            onClick={() => fileInputRef.current?.click()}
+                                            disabled={isUploading}
+                                            className="flex items-center gap-2 px-4 py-2 bg-surface border border-border rounded-lg hover:border-accent hover:text-accent transition-colors text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                                        >
+                                            {isUploading ? (
+                                                <>
+                                                    <span className="w-4 h-4 border-2 border-accent border-t-transparent rounded-full animate-spin" />
+                                                    Uploading...
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <span>📁</span>
+                                                    {imageUrl ? "Replace Image" : "Upload Image"}
+                                                </>
+                                            )}
+                                        </button>
+                                        <input
+                                            ref={fileInputRef}
+                                            type="file"
+                                            accept="image/jpeg,image/jpg,image/png,image/webp,image/gif"
+                                            onChange={handleImageUpload}
+                                            className="hidden"
+                                        />
+                                    </div>
+
+                                    {/* OR paste URL */}
+                                    <div className="flex items-center gap-2 text-xs text-secondary">
+                                        <div className="flex-1 border-t border-border" />
+                                        <span>or paste URL</span>
+                                        <div className="flex-1 border-t border-border" />
+                                    </div>
+                                    <input
+                                        type="text"
+                                        value={imageUrl}
+                                        onChange={(e) => setImageUrl(e.target.value)}
+                                        className="w-full px-4 py-2 bg-surface border border-border rounded-lg focus:outline-none focus:border-accent text-sm"
+                                        placeholder="https://..."
+                                    />
+                                </div>
                             </div>
+
                             <div>
                                 <label className="block text-sm font-medium mb-2">Live URL</label>
                                 <input
@@ -285,6 +405,7 @@ export function ProjectsManager() {
                                     onClick={() => {
                                         setIsFormOpen(false);
                                         setEditingProject(null);
+                                        setImageUrl("");
                                     }}
                                     className="flex-1 px-6 py-3 bg-surface border border-border rounded-lg hover:bg-surface-elevated transition-colors"
                                 >

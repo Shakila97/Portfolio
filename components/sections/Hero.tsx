@@ -50,7 +50,7 @@ export function Hero({ mode, setMode }: HeroProps) {
                                         : "text-secondary hover:text-accent"
                                 )}
                             >
-                                Visual Designer
+                                Designer
                             </button>
                         </div>
 

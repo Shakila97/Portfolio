@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+import Image from "next/image";
 
 interface Achievement {
     id: string;
@@ -12,6 +13,7 @@ interface Achievement {
     icon: string;
     certificateUrl: string;
     credentialUrl: string;
+    certificateImage: string;
 }
 
 export function AchievementsManager() {
@@ -19,6 +21,11 @@ export function AchievementsManager() {
     const [isLoading, setIsLoading] = useState(true);
     const [editingAchievement, setEditingAchievement] = useState<Achievement | null>(null);
     const [isFormOpen, setIsFormOpen] = useState(false);
+
+    // Certificate image upload state
+    const [certImageUrl, setCertImageUrl] = useState("");
+    const [isUploading, setIsUploading] = useState(false);
+    const fileInputRef = useRef<HTMLInputElement>(null);
 
     // Fetch achievements
     const fetchAchievements = async () => {
@@ -38,6 +45,43 @@ export function AchievementsManager() {
         fetchAchievements();
     }, []);
 
+    // Sync cert image when editing achievement changes
+    useEffect(() => {
+        setCertImageUrl(editingAchievement?.certificateImage || "");
+    }, [editingAchievement]);
+
+    // Handle certificate image upload
+    const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+
+        setIsUploading(true);
+        try {
+            const formData = new FormData();
+            formData.append("file", file);
+            formData.append("folder", "achievements");
+
+            const response = await fetch("/api/upload", {
+                method: "POST",
+                body: formData,
+            });
+
+            if (!response.ok) {
+                const err = await response.json();
+                alert(err.error || "Upload failed");
+                return;
+            }
+
+            const { url } = await response.json();
+            setCertImageUrl(url);
+        } catch (error) {
+            console.error("Upload error:", error);
+            alert("Failed to upload image");
+        } finally {
+            setIsUploading(false);
+        }
+    };
+
     // Create or update achievement
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -52,11 +96,11 @@ export function AchievementsManager() {
             icon: formData.get("icon") as string,
             certificateUrl: formData.get("certificateUrl") as string,
             credentialUrl: formData.get("credentialUrl") as string,
+            certificateImage: certImageUrl,
         };
 
         try {
             if (editingAchievement) {
-                // Update
                 await fetch("/api/achievements", {
                     method: "PUT",
                     headers: { "Content-Type": "application/json" },
@@ -66,7 +110,6 @@ export function AchievementsManager() {
                     }),
                 });
             } else {
-                // Create
                 await fetch("/api/achievements", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
@@ -77,6 +120,7 @@ export function AchievementsManager() {
             fetchAchievements();
             setIsFormOpen(false);
             setEditingAchievement(null);
+            setCertImageUrl("");
         } catch (error) {
             console.error("Failed to save achievement:", error);
         }
@@ -96,16 +140,19 @@ export function AchievementsManager() {
         }
     };
 
+    const openAddForm = () => {
+        setEditingAchievement(null);
+        setCertImageUrl("");
+        setIsFormOpen(true);
+    };
+
     return (
         <div className="space-y-6">
             {/* Header */}
             <div className="flex items-center justify-between">
                 <h2 className="text-2xl font-bold">Achievements & Certifications</h2>
                 <button
-                    onClick={() => {
-                        setEditingAchievement(null);
-                        setIsFormOpen(true);
-                    }}
+                    onClick={openAddForm}
                     className="px-6 py-2 bg-accent text-white rounded-lg hover:bg-accent/90 transition-colors"
                 >
                     + Add Achievement
@@ -120,40 +167,54 @@ export function AchievementsManager() {
                     {achievements.map((achievement) => (
                         <div
                             key={achievement.id}
-                            className="bg-surface-elevated border border-border rounded-lg p-4 hover:border-accent transition-colors"
+                            className="bg-surface-elevated border border-border rounded-lg overflow-hidden hover:border-accent transition-colors"
                         >
-                            <div className="flex items-start gap-3 mb-3">
-                                <div className="text-2xl">{achievement.icon}</div>
-                                <div className="flex-1">
-                                    <h3 className="font-bold text-lg">{achievement.title}</h3>
-                                    <p className="text-sm text-secondary">{achievement.issuer}</p>
-                                    <p className="text-xs text-secondary">{achievement.date}</p>
+                            {/* Certificate image thumbnail */}
+                            {achievement.certificateImage && (
+                                <div className="relative w-full h-32 bg-surface">
+                                    <Image
+                                        src={achievement.certificateImage}
+                                        alt={`${achievement.title} certificate`}
+                                        fill
+                                        className="object-cover"
+                                        unoptimized
+                                    />
                                 </div>
-                            </div>
-                            <p className="text-sm text-secondary mb-3 line-clamp-2">
-                                {achievement.description}
-                            </p>
-                            <div className="mb-3">
-                                <span className="px-2 py-1 bg-surface text-xs rounded border border-border">
-                                    {achievement.category}
-                                </span>
-                            </div>
-                            <div className="flex gap-2">
-                                <button
-                                    onClick={() => {
-                                        setEditingAchievement(achievement);
-                                        setIsFormOpen(true);
-                                    }}
-                                    className="flex-1 px-3 py-1.5 text-sm bg-surface border border-border rounded hover:bg-accent hover:border-accent hover:text-white transition-colors"
-                                >
-                                    Edit
-                                </button>
-                                <button
-                                    onClick={() => handleDelete(achievement.id)}
-                                    className="flex-1 px-3 py-1.5 text-sm bg-surface border border-red-500/50 text-red-500 rounded hover:bg-red-500 hover:text-white transition-colors"
-                                >
-                                    Delete
-                                </button>
+                            )}
+                            <div className="p-4">
+                                <div className="flex items-start gap-3 mb-3">
+                                    <div className="text-2xl">{achievement.icon}</div>
+                                    <div className="flex-1">
+                                        <h3 className="font-bold text-lg">{achievement.title}</h3>
+                                        <p className="text-sm text-secondary">{achievement.issuer}</p>
+                                        <p className="text-xs text-secondary">{achievement.date}</p>
+                                    </div>
+                                </div>
+                                <p className="text-sm text-secondary mb-3 line-clamp-2">
+                                    {achievement.description}
+                                </p>
+                                <div className="mb-3">
+                                    <span className="px-2 py-1 bg-surface text-xs rounded border border-border">
+                                        {achievement.category}
+                                    </span>
+                                </div>
+                                <div className="flex gap-2">
+                                    <button
+                                        onClick={() => {
+                                            setEditingAchievement(achievement);
+                                            setIsFormOpen(true);
+                                        }}
+                                        className="flex-1 px-3 py-1.5 text-sm bg-surface border border-border rounded hover:bg-accent hover:border-accent hover:text-white transition-colors"
+                                    >
+                                        Edit
+                                    </button>
+                                    <button
+                                        onClick={() => handleDelete(achievement.id)}
+                                        className="flex-1 px-3 py-1.5 text-sm bg-surface border border-red-500/50 text-red-500 rounded hover:bg-red-500 hover:text-white transition-colors"
+                                    >
+                                        Delete
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     ))}
@@ -231,6 +292,76 @@ export function AchievementsManager() {
                                     className="w-full px-4 py-2 bg-surface border border-border rounded-lg focus:outline-none focus:border-accent"
                                 />
                             </div>
+
+                            {/* Certificate Image Upload */}
+                            <div>
+                                <label className="block text-sm font-medium mb-2">Certificate Image</label>
+                                <div className="space-y-3">
+                                    {/* Preview */}
+                                    {certImageUrl && (
+                                        <div className="relative w-full h-40 rounded-lg overflow-hidden border border-border bg-surface">
+                                            <Image
+                                                src={certImageUrl}
+                                                alt="Certificate preview"
+                                                fill
+                                                className="object-cover"
+                                                unoptimized
+                                            />
+                                            <button
+                                                type="button"
+                                                onClick={() => setCertImageUrl("")}
+                                                className="absolute top-2 right-2 w-7 h-7 bg-black/60 hover:bg-red-500 text-white rounded-full flex items-center justify-center text-sm transition-colors"
+                                            >
+                                                ✕
+                                            </button>
+                                        </div>
+                                    )}
+
+                                    {/* Upload Button */}
+                                    <div className="flex gap-2">
+                                        <button
+                                            type="button"
+                                            onClick={() => fileInputRef.current?.click()}
+                                            disabled={isUploading}
+                                            className="flex items-center gap-2 px-4 py-2 bg-surface border border-border rounded-lg hover:border-accent hover:text-accent transition-colors text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                                        >
+                                            {isUploading ? (
+                                                <>
+                                                    <span className="w-4 h-4 border-2 border-accent border-t-transparent rounded-full animate-spin" />
+                                                    Uploading...
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <span>🏅</span>
+                                                    {certImageUrl ? "Replace Certificate Image" : "Upload Certificate Image"}
+                                                </>
+                                            )}
+                                        </button>
+                                        <input
+                                            ref={fileInputRef}
+                                            type="file"
+                                            accept="image/jpeg,image/jpg,image/png,image/webp,image/gif"
+                                            onChange={handleImageUpload}
+                                            className="hidden"
+                                        />
+                                    </div>
+
+                                    {/* OR paste URL */}
+                                    <div className="flex items-center gap-2 text-xs text-secondary">
+                                        <div className="flex-1 border-t border-border" />
+                                        <span>or paste URL</span>
+                                        <div className="flex-1 border-t border-border" />
+                                    </div>
+                                    <input
+                                        type="text"
+                                        value={certImageUrl}
+                                        onChange={(e) => setCertImageUrl(e.target.value)}
+                                        className="w-full px-4 py-2 bg-surface border border-border rounded-lg focus:outline-none focus:border-accent text-sm"
+                                        placeholder="https://..."
+                                    />
+                                </div>
+                            </div>
+
                             <div>
                                 <label className="block text-sm font-medium mb-2">Certificate URL</label>
                                 <input
@@ -261,6 +392,7 @@ export function AchievementsManager() {
                                     onClick={() => {
                                         setIsFormOpen(false);
                                         setEditingAchievement(null);
+                                        setCertImageUrl("");
                                     }}
                                     className="flex-1 px-6 py-3 bg-surface border border-border rounded-lg hover:bg-surface-elevated transition-colors"
                                 >
