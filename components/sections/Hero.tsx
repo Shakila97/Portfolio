@@ -95,11 +95,26 @@ export function Hero({ mode, setMode }: HeroProps) {
                                 isVisible ? "opacity-100 translate-x-0" : "opacity-0 translate-x-8"
                             )}
                         >
+                            {/* Developer mode image */}
+                            <Image
+                                src="/images/hero-developer.png"
+                                alt="Developer Mode"
+                                fill
+                                className={cn(
+                                    "object-cover transition-opacity duration-700 ease-in-out",
+                                    mode === "developer" ? "opacity-100" : "opacity-0"
+                                )}
+                                priority
+                            />
+                            {/* Designer mode image */}
                             <Image
                                 src="/images/Group 1244830446.png"
-                                alt="Portfolio Hero Image"
+                                alt="Designer Mode"
                                 fill
-                                className="object-cover"
+                                className={cn(
+                                    "object-cover transition-opacity duration-700 ease-in-out",
+                                    mode === "designer" ? "opacity-100" : "opacity-0"
+                                )}
                                 priority
                             />
                             <div className={cn(
