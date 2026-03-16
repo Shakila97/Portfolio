@@ -17,7 +17,7 @@ export function Hero({ mode, setMode }: HeroProps) {
     return (
         <section
             id="home"
-            className="relative min-h-screen flex items-center justify-center w-full px-4 py-8 lg:px-[120px] lg:py-16 overflow-hidden"
+            className="relative min-h-screen flex items-center justify-center w-full px-4 py-12 sm:py-8 lg:px-[120px] lg:py-16 overflow-hidden"
         >
             {/* Background gradient effect */}
             <div className="absolute inset-0 bg-gradient-to-br from-surface via-surface to-surface-elevated opacity-50" />
@@ -26,14 +26,14 @@ export function Hero({ mode, setMode }: HeroProps) {
                 ref={ref}
                 className="relative z-10 mx-auto max-w-[1200px] w-full"
             >
-                <div className="flex flex-col lg:flex-row items-center justify-between gap-8 lg:gap-16">
+                <div className="flex flex-col lg:flex-row items-center justify-between gap-4 sm:gap-8 lg:gap-16">
                     {/* Left Column: Text Content */}
-                    <div className="flex-1 flex flex-col items-start lg:items-start text-center lg:text-left order-2 lg:order-1">
-                        <div className="space-y-4">
+                    <div className="flex-1 flex flex-col items-center lg:items-start text-center lg:text-left order-2 lg:order-1">
+                        <div className="space-y-2 sm:space-y-4">
                             <button
                                 onClick={() => setMode("developer")}
                                 className={cn(
-                                    "block uppercase tracking-wider text-[40px] lg:text-[80px] leading-[1] transition-all duration-200",
+                                    "block uppercase tracking-wider text-[28px] sm:text-[36px] lg:text-[80px] leading-[1] transition-all duration-200",
                                     mode === "developer"
                                         ? "text-primary font-bold scale-105 origin-center lg:origin-left"
                                         : "text-secondary hover:text-primary"
@@ -44,7 +44,7 @@ export function Hero({ mode, setMode }: HeroProps) {
                             <button
                                 onClick={() => setMode("designer")}
                                 className={cn(
-                                    "block uppercase tracking-wider text-[40px] lg:text-[100px] leading-[1] transition-all duration-200",
+                                    "block uppercase tracking-wider text-[28px] sm:text-[36px] lg:text-[100px] leading-[1] transition-all duration-200",
                                     mode === "designer"
                                         ? "text-accent font-bold scale-105 origin-center lg:origin-left"
                                         : "text-secondary hover:text-accent"
@@ -56,7 +56,7 @@ export function Hero({ mode, setMode }: HeroProps) {
 
                         <p
                             className={cn(
-                                "text-lg lg:text-xl text-secondary max-w-xl mt-8 transition-all duration-1000 ease-out",
+                                "text-sm sm:text-base lg:text-xl text-secondary max-w-xs sm:max-w-sm lg:max-w-xl mt-4 sm:mt-6 lg:mt-8 transition-all duration-1000 ease-out",
                                 isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
                             )}
                         >
@@ -68,19 +68,19 @@ export function Hero({ mode, setMode }: HeroProps) {
                         {/* CTA Buttons */}
                         <div
                             className={cn(
-                                "flex flex-col sm:flex-row gap-4 mt-8 transition-all duration-1000 ease-out delay-200",
+                                "flex flex-col sm:flex-row gap-3 sm:gap-4 mt-4 sm:mt-6 lg:mt-8 w-full sm:w-auto transition-all duration-1000 ease-out delay-200",
                                 isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
                             )}
                         >
                             <a
                                 href="#projects"
-                                className="inline-flex items-center justify-center px-8 py-4 text-lg rounded-lg bg-white text-black hover:bg-gray-200 transition-all duration-300 active:scale-95"
+                                className="inline-flex items-center justify-center px-6 py-3 sm:px-8 sm:py-4 text-base sm:text-lg rounded-lg bg-white text-black hover:bg-gray-200 transition-all duration-300 active:scale-95 w-full sm:w-auto"
                             >
                                 View Projects
                             </a>
                             <a
                                 href="#contact"
-                                className="inline-flex items-center justify-center px-8 py-4 text-lg rounded-lg border-2 border-white text-white hover:bg-white hover:text-black transition-all duration-300 active:scale-95"
+                                className="inline-flex items-center justify-center px-6 py-3 sm:px-8 sm:py-4 text-base sm:text-lg rounded-lg border-2 border-white text-white hover:bg-white hover:text-black transition-all duration-300 active:scale-95 w-full sm:w-auto"
                             >
                                 Get in Touch
                             </a>
@@ -88,7 +88,7 @@ export function Hero({ mode, setMode }: HeroProps) {
                     </div>
 
                     {/* Right Column: Image */}
-                    <div className="flex-1 w-full max-w-[500px] lg:max-w-none order-1 lg:order-2">
+                    <div className="flex-shrink-0 w-[60vw] max-w-[220px] sm:w-full sm:max-w-[380px] lg:flex-1 lg:max-w-none order-1 lg:order-2">
                         <div
                             className={cn(
                                 "relative aspect-square rounded-2xl overflow-hidden transition-all duration-1000 ease-out",

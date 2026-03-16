@@ -94,13 +94,12 @@ export function AboutMe() {
                                 : "opacity-0 translate-y-8"
                         )}
                     >
-                        <div className="relative aspect-square rounded-lg overflow-hidden border border-border">
-                            <div className="absolute inset-0 bg-gradient-to-br from-accent/20 to-transparent z-10" />
+                        <div className="relative aspect-[3/4] w-full">
                             <Image
                                 src="/images/about-me.png"
                                 alt="About Me"
                                 fill
-                                className="object-cover"
+                                className="object-contain object-top"
                             />
                         </div>
                     </div>
