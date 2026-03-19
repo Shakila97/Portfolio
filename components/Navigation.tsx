@@ -24,7 +24,8 @@ export function Navigation() {
         { href: "#home", label: "Home" },
         { href: "#about", label: "About" },
         { href: "#projects", label: "Projects" },
-        { href: "#contact", label: "Contact Me" },
+        { href: "#achievements", label: "Achievements" },
+        { href: "#contact", label: "Contact" },
     ];
 
     const handleLinkClick = () => {
@@ -41,9 +42,9 @@ export function Navigation() {
             )}
         >
             <div className="w-full px-4 lg:px-[120px]">
-                <div className="mx-auto max-w-[1200px] flex items-center justify-between h-16">
+                <div className="mx-auto max-w-[1200px] flex items-center justify-between h-14 lg:h-16">
                     {/* Logo */}
-                    <a href="#home" className="text-xl font-bold">
+                    <a href="#home" className="text-base lg:text-xl font-bold tracking-tight">
                         Portfolio
                     </a>
 
@@ -53,7 +54,7 @@ export function Navigation() {
                             <a
                                 key={link.href}
                                 href={link.href}
-                                className="text-secondary hover:text-primary transition-colors duration-300"
+                                className="text-secondary hover:text-primary transition-colors duration-300 text-sm"
                             >
                                 {link.label}
                             </a>
@@ -63,24 +64,24 @@ export function Navigation() {
                     {/* Mobile Menu Button */}
                     <button
                         onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                        className="md:hidden w-10 h-10 flex flex-col items-center justify-center gap-1.5"
+                        className="md:hidden w-10 h-10 flex flex-col items-center justify-center gap-1.5 rounded-lg hover:bg-surface-elevated/50 transition-colors"
                         aria-label="Toggle menu"
                     >
                         <span
                             className={cn(
-                                "w-6 h-0.5 bg-primary transition-all duration-300",
+                                "w-5 h-0.5 bg-primary transition-all duration-300",
                                 isMobileMenuOpen && "rotate-45 translate-y-2"
                             )}
                         />
                         <span
                             className={cn(
-                                "w-6 h-0.5 bg-primary transition-all duration-300",
-                                isMobileMenuOpen && "opacity-0"
+                                "w-5 h-0.5 bg-primary transition-all duration-300",
+                                isMobileMenuOpen && "opacity-0 scale-x-0"
                             )}
                         />
                         <span
                             className={cn(
-                                "w-6 h-0.5 bg-primary transition-all duration-300",
+                                "w-5 h-0.5 bg-primary transition-all duration-300",
                                 isMobileMenuOpen && "-rotate-45 -translate-y-2"
                             )}
                         />
@@ -88,28 +89,30 @@ export function Navigation() {
                 </div>
             </div>
 
-            {/* Mobile Menu */}
+            {/* Mobile Menu – Full-screen overlay */}
             <div
                 className={cn(
-                    "fixed inset-0 top-16 bg-surface-elevated/98 backdrop-blur-md md:hidden transition-all duration-300 overflow-y-auto",
+                    "fixed inset-0 top-14 bg-surface/98 backdrop-blur-xl md:hidden transition-all duration-300 overflow-y-auto",
                     isMobileMenuOpen
-                        ? "opacity-100 pointer-events-auto"
-                        : "opacity-0 pointer-events-none"
+                        ? "opacity-100 pointer-events-auto translate-y-0"
+                        : "opacity-0 pointer-events-none -translate-y-2"
                 )}
             >
-                <div className="min-h-full p-4">
-                    <div className="flex flex-col gap-4 pt-8">
-                        {navLinks.map((link) => (
-                            <a
-                                key={link.href}
-                                href={link.href}
-                                onClick={handleLinkClick}
-                                className="text-2xl text-secondary hover:text-primary transition-colors duration-300 py-3"
-                            >
-                                {link.label}
-                            </a>
-                        ))}
-                    </div>
+                <div className="flex flex-col h-full px-6 pt-10 pb-8 gap-1">
+                    {navLinks.map((link, i) => (
+                        <a
+                            key={link.href}
+                            href={link.href}
+                            onClick={handleLinkClick}
+                            className={cn(
+                                "text-3xl font-bold text-secondary hover:text-primary transition-all duration-200 py-4 border-b border-border/40",
+                                "active:scale-95"
+                            )}
+                            style={{ transitionDelay: `${i * 50}ms` }}
+                        >
+                            {link.label}
+                        </a>
+                    ))}
                 </div>
             </div>
         </nav>

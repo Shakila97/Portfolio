@@ -6,7 +6,8 @@ import { cn } from "@/lib/utils";
 
 /**
  * Contact Form Section
- * Client component for form handling
+ * Mobile: compact full-width form with smaller padding
+ * Desktop: centered max-width form (unchanged)
  */
 export function Contact() {
     const { ref, isVisible } = useScrollAnimation(0.3);
@@ -22,13 +23,10 @@ export function Contact() {
         e.preventDefault();
         setIsSubmitting(true);
 
-        // Simulate form submission
         setTimeout(() => {
             setIsSubmitting(false);
             setSubmitStatus("success");
             setFormData({ name: "", email: "", message: "" });
-
-            // Reset success message after 3 seconds
             setTimeout(() => setSubmitStatus("idle"), 3000);
         }, 1000);
     };
@@ -45,12 +43,12 @@ export function Contact() {
     return (
         <section
             id="contact"
-            className="w-full px-4 py-16 lg:px-[120px] lg:py-24 bg-surface"
+            className="w-full px-4 py-10 lg:px-[120px] lg:py-24 bg-surface"
         >
             <div ref={ref} className="mx-auto max-w-[800px]">
                 <h2
                     className={cn(
-                        "text-3xl lg:text-5xl font-bold mb-12 text-center transition-all duration-700 ease-out",
+                        "text-2xl lg:text-5xl font-bold mb-6 lg:mb-12 text-center transition-all duration-700 ease-out",
                         isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
                     )}
                 >
@@ -60,16 +58,13 @@ export function Contact() {
                 <form
                     onSubmit={handleSubmit}
                     className={cn(
-                        "space-y-6 transition-all duration-700 ease-out delay-200",
+                        "space-y-4 lg:space-y-6 transition-all duration-700 ease-out delay-200",
                         isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
                     )}
                 >
                     {/* Name Input */}
                     <div>
-                        <label
-                            htmlFor="name"
-                            className="block text-sm font-medium text-secondary mb-2"
-                        >
+                        <label htmlFor="name" className="block text-xs lg:text-sm font-medium text-secondary mb-1.5 lg:mb-2">
                             Name
                         </label>
                         <input
@@ -79,17 +74,14 @@ export function Contact() {
                             value={formData.name}
                             onChange={handleChange}
                             required
-                            className="w-full px-4 py-3 bg-surface-elevated border border-border rounded-lg focus:outline-none focus:border-accent transition-colors duration-300 text-primary"
+                            className="w-full px-3 py-2.5 lg:px-4 lg:py-3 bg-surface-elevated border border-border rounded-lg focus:outline-none focus:border-accent transition-colors duration-300 text-primary text-sm lg:text-base"
                             placeholder="Your name"
                         />
                     </div>
 
                     {/* Email Input */}
                     <div>
-                        <label
-                            htmlFor="email"
-                            className="block text-sm font-medium text-secondary mb-2"
-                        >
+                        <label htmlFor="email" className="block text-xs lg:text-sm font-medium text-secondary mb-1.5 lg:mb-2">
                             Email
                         </label>
                         <input
@@ -99,17 +91,14 @@ export function Contact() {
                             value={formData.email}
                             onChange={handleChange}
                             required
-                            className="w-full px-4 py-3 bg-surface-elevated border border-border rounded-lg focus:outline-none focus:border-accent transition-colors duration-300 text-primary"
+                            className="w-full px-3 py-2.5 lg:px-4 lg:py-3 bg-surface-elevated border border-border rounded-lg focus:outline-none focus:border-accent transition-colors duration-300 text-primary text-sm lg:text-base"
                             placeholder="your.email@example.com"
                         />
                     </div>
 
                     {/* Message Textarea */}
                     <div>
-                        <label
-                            htmlFor="message"
-                            className="block text-sm font-medium text-secondary mb-2"
-                        >
+                        <label htmlFor="message" className="block text-xs lg:text-sm font-medium text-secondary mb-1.5 lg:mb-2">
                             Message
                         </label>
                         <textarea
@@ -118,8 +107,8 @@ export function Contact() {
                             value={formData.message}
                             onChange={handleChange}
                             required
-                            rows={6}
-                            className="w-full px-4 py-3 bg-surface-elevated border border-border rounded-lg focus:outline-none focus:border-accent transition-colors duration-300 text-primary resize-none"
+                            rows={5}
+                            className="w-full px-3 py-2.5 lg:px-4 lg:py-3 bg-surface-elevated border border-border rounded-lg focus:outline-none focus:border-accent transition-colors duration-300 text-primary resize-none text-sm lg:text-base"
                             placeholder="Your message..."
                         />
                     </div>
@@ -128,15 +117,15 @@ export function Contact() {
                     <button
                         type="submit"
                         disabled={isSubmitting}
-                        className="w-full px-8 py-4 bg-white text-black rounded-lg hover:bg-gray-200 transition-all duration-300 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed font-medium"
+                        className="w-full px-6 py-3 lg:px-8 lg:py-4 bg-white text-black rounded-lg hover:bg-gray-200 transition-all duration-300 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed font-medium text-sm lg:text-base"
                     >
                         {isSubmitting ? "Sending..." : "Send Message"}
                     </button>
 
                     {/* Success Message */}
                     {submitStatus === "success" && (
-                        <div className="p-4 bg-accent/10 border border-accent rounded-lg text-center">
-                            <p className="text-accent">Message sent successfully! I&apos;ll get back to you soon.</p>
+                        <div className="p-3 lg:p-4 bg-accent/10 border border-accent rounded-lg text-center">
+                            <p className="text-accent text-sm">Message sent successfully! I&apos;ll get back to you soon.</p>
                         </div>
                     )}
                 </form>

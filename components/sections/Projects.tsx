@@ -20,19 +20,14 @@ interface Project {
     githubUrl?: string;
 }
 
-/**
- * Projects Section with dynamic bento-box grid layout
- * Fetches projects from the API and renders them with uploaded images
- */
-
 // Fallback data in case API fails
 const fallbackDesignerProjects: Project[] = [
-    { id: "1", title: "UI/UX", category: "Design", layout: "tall", description: "Modern user interface design" },
-    { id: "2", title: "Branding", category: "Identity", layout: "medium", description: "Brand identity and logo design" },
-    { id: "3", title: "Social", category: "Media", layout: "short", description: "Social media graphics and content" },
-    { id: "4", title: "Character", category: "Design", layout: "tall", description: "Character design and illustration" },
-    { id: "5", title: "Logo", category: "Branding", layout: "short", description: "Professional logo design" },
-    { id: "6", title: "Paintings", category: "Art", layout: "medium", description: "Digital paintings and artwork" },
+    { id: "1", title: "UI/UX", category: "UI/UX", layout: "tall", description: "Modern user interface design" },
+    { id: "2", title: "Branding", category: "Branding", layout: "medium", description: "Brand identity and logo design" },
+    { id: "3", title: "Social", category: "Illustration", layout: "short", description: "Social media graphics and content" },
+    { id: "4", title: "Character", category: "Illustration", layout: "tall", description: "Character design and illustration" },
+    { id: "5", title: "Logo Design", category: "Branding", layout: "short", description: "Professional logo design" },
+    { id: "6", title: "Digital Gallery", category: "Key Visuals", layout: "medium", description: "Digital paintings and artwork" },
 ];
 
 const fallbackDeveloperProjects: Project[] = [
@@ -44,13 +39,13 @@ const fallbackDeveloperProjects: Project[] = [
     { id: "d6", title: "Task Manager", category: "Mobile", layout: "medium", description: "React Native Productivity App" },
 ];
 
-/** Returns Tailwind height classes based on layout value */
+/** Returns Tailwind height classes based on layout value — desktop only */
 function getCardHeight(layout: string): string {
     switch (layout) {
-        case "tall": return "h-[520px]";
-        case "medium": return "h-[336px]";
-        case "short": return "h-[168px]";
-        default: return "h-[260px]";
+        case "tall": return "lg:h-[520px]";
+        case "medium": return "lg:h-[336px]";
+        case "short": return "lg:h-[168px]";
+        default: return "lg:h-[260px]";
     }
 }
 
@@ -64,6 +59,8 @@ function ProjectCard({ project, isVertical }: { project: Project; isVertical?: b
                 "group relative rounded-2xl overflow-hidden border border-border",
                 "hover:border-accent transition-all duration-500 cursor-pointer",
                 "flex items-center justify-center",
+                // Mobile: fixed compact height; Desktop: layout-based height
+                "h-[160px]",
                 heightClass,
                 project.image ? "" : "bg-gradient-to-br from-[#555] to-[#333]"
             )}
@@ -85,19 +82,23 @@ function ProjectCard({ project, isVertical }: { project: Project; isVertical?: b
             {/* Title */}
             <h3
                 className={cn(
-                    "relative z-10 font-bold text-white/90 uppercase tracking-wider",
+                    "relative z-10 font-bold text-white/90 uppercase tracking-wider text-lg",
                     "drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]",
-                    isVertical
-                        ? "text-2xl [writing-mode:vertical-rl] rotate-180"
-                        : "text-xl"
+                    // Writing mode only on desktop tall cards
+                    isVertical && "lg:text-2xl lg:[writing-mode:vertical-rl] lg:rotate-180"
                 )}
             >
                 {project.title}
             </h3>
 
+            {/* Category badge visible always */}
+            <span className="absolute bottom-2 left-2 z-10 px-2 py-0.5 bg-black/60 border border-white/20 text-white/70 text-[10px] rounded-full backdrop-blur-sm">
+                {project.category}
+            </span>
+
             {/* Hover info overlay */}
-            <div className="absolute inset-0 z-20 flex flex-col items-center justify-end p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                <p className="text-white/80 text-sm text-center mb-2 line-clamp-2 drop-shadow">
+            <div className="absolute inset-0 z-20 flex flex-col items-center justify-end p-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <p className="text-white/80 text-xs text-center mb-2 line-clamp-2 drop-shadow">
                     {project.description}
                 </p>
                 {project.technologies && project.technologies.length > 0 && (
@@ -112,7 +113,7 @@ function ProjectCard({ project, isVertical }: { project: Project; isVertical?: b
                         ))}
                     </div>
                 )}
-                <div className="flex gap-2 mt-3">
+                <div className="flex gap-2 mt-2">
                     {project.liveUrl && (
                         <a
                             href={project.liveUrl}
@@ -142,8 +143,7 @@ function ProjectCard({ project, isVertical }: { project: Project; isVertical?: b
 }
 
 /**
- * Groups projects into columns, pairing "short" + "medium" in the same column
- * and keeping "tall" cards as standalone columns.
+ * Groups projects into columns for the desktop bento layout
  */
 function buildColumns(projects: Project[]): Project[][] {
     const columns: Project[][] = [];
@@ -157,7 +157,6 @@ function buildColumns(projects: Project[]): Project[][] {
             columns.push([p]);
             i++;
         } else if (layout === "short") {
-            // Try to pair with an adjacent medium
             const next = projects[i + 1];
             if (next && next.layout === "medium") {
                 columns.push([p, next]);
@@ -167,7 +166,6 @@ function buildColumns(projects: Project[]): Project[][] {
                 i++;
             }
         } else if (layout === "medium") {
-            // Try to pair with an adjacent short
             const next = projects[i + 1];
             if (next && next.layout === "short") {
                 columns.push([p, next]);
@@ -227,22 +225,22 @@ export function Projects({ mode }: ProjectsProps) {
     return (
         <section
             id="projects"
-            className="w-full px-4 py-16 lg:px-[120px] lg:py-24 bg-surface-elevated"
+            className="w-full px-4 py-10 lg:px-[120px] lg:py-24 bg-surface-elevated"
         >
             <div ref={ref} className="mx-auto max-w-[1200px]">
                 <h2
                     className={cn(
-                        "text-3xl lg:text-5xl font-bold mb-12 transition-all duration-700 ease-out",
+                        "text-2xl lg:text-5xl font-bold mb-6 lg:mb-12 transition-all duration-700 ease-out",
                         isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
                     )}
                 >
                     {mode === "developer" ? "Development Projects" : "Design Showcase"}
                 </h2>
 
-                {/* Filter tabs */}
+                {/* Filter tabs – horizontal scroll on mobile */}
                 <div
                     className={cn(
-                        "flex flex-wrap gap-4 mb-12 transition-all duration-700 ease-out delay-200",
+                        "flex gap-2 lg:gap-4 mb-6 lg:mb-12 overflow-x-auto pb-2 scrollbar-hide transition-all duration-700 ease-out delay-200",
                         isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
                     )}
                 >
@@ -251,7 +249,7 @@ export function Projects({ mode }: ProjectsProps) {
                             key={filter}
                             onClick={() => setActiveFilter(filter)}
                             className={cn(
-                                "px-6 py-2 rounded-full border transition-all duration-300 text-sm",
+                                "flex-shrink-0 px-4 py-1.5 lg:px-6 lg:py-2 rounded-full border transition-all duration-300 text-xs lg:text-sm",
                                 activeFilter === filter
                                     ? "bg-accent border-accent text-white"
                                     : "bg-surface border-border hover:bg-accent hover:border-accent"
@@ -262,56 +260,59 @@ export function Projects({ mode }: ProjectsProps) {
                     ))}
                 </div>
 
-                {/* Dynamic bento-box grid */}
+                {/* Loading state */}
                 {isLoading ? (
-                    <div
-                        className={cn(
-                            "flex flex-col md:flex-row gap-4 justify-center transition-all duration-700 ease-out delay-400",
-                            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-                        )}
-                    >
+                    <div className="grid grid-cols-2 lg:hidden gap-3">
                         {[...Array(4)].map((_, i) => (
-                            <div
-                                key={i}
-                                className="min-w-[260px] h-[520px] rounded-2xl bg-surface animate-pulse"
-                            />
+                            <div key={i} className="h-[160px] rounded-2xl bg-surface animate-pulse" />
                         ))}
                     </div>
                 ) : filtered.length === 0 ? (
-                    <div className="flex items-center justify-center h-64 text-secondary text-lg">
+                    <div className="flex items-center justify-center h-40 text-secondary text-base">
                         No projects found in this category.
                     </div>
                 ) : (
-                    <div
-                        className={cn(
-                            "flex flex-col md:flex-row flex-wrap gap-4 justify-center transition-all duration-700 ease-out delay-400",
-                            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-                        )}
-                    >
-                        {columns.map((col, colIdx) => {
-                            const isTallSingle = col.length === 1 && col[0].layout === "tall";
+                    <>
+                        {/* ── MOBILE layout: 2-column grid ── */}
+                        <div
+                            className={cn(
+                                "grid grid-cols-2 gap-3 lg:hidden transition-all duration-700 ease-out delay-400",
+                                isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+                            )}
+                        >
+                            {filtered.map((project) => (
+                                <ProjectCard key={project.id} project={project} isVertical={false} />
+                            ))}
+                        </div>
 
-                            if (col.length === 1) {
+                        {/* ── DESKTOP layout: bento-box columns ── */}
+                        <div
+                            className={cn(
+                                "hidden lg:flex flex-row flex-wrap gap-4 justify-center transition-all duration-700 ease-out delay-400",
+                                isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+                            )}
+                        >
+                            {columns.map((col, colIdx) => {
+                                const isTallSingle = col.length === 1 && col[0].layout === "tall";
+
+                                if (col.length === 1) {
+                                    return (
+                                        <div key={col[0].id} className="min-w-[260px]">
+                                            <ProjectCard project={col[0]} isVertical={isTallSingle} />
+                                        </div>
+                                    );
+                                }
+
                                 return (
-                                    <div key={col[0].id} className="min-w-[260px]">
-                                        <ProjectCard
-                                            project={col[0]}
-                                            isVertical={isTallSingle}
-                                        />
+                                    <div key={`col-${colIdx}`} className="flex flex-col gap-4 min-w-[260px]">
+                                        {col.map((p) => (
+                                            <ProjectCard key={p.id} project={p} isVertical={false} />
+                                        ))}
                                     </div>
                                 );
-                            }
-
-                            // Two cards stacked (short + medium or medium + short)
-                            return (
-                                <div key={`col-${colIdx}`} className="flex flex-col gap-4 min-w-[260px]">
-                                    {col.map((p) => (
-                                        <ProjectCard key={p.id} project={p} isVertical={false} />
-                                    ))}
-                                </div>
-                            );
-                        })}
-                    </div>
+                            })}
+                        </div>
+                    </>
                 )}
             </div>
         </section>
